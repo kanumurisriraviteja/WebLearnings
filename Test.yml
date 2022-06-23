@@ -1,0 +1,21 @@
+employees: #object
+ - # Adding multiple objects
+  id: 1 #key value pair
+  name: a
+  salaried: false
+  skills: ['c#','MVC'] # Array
+  comments: |
+   'this is comment on multiple line'
+   'second line'
+ - id: 2 #key value pair
+   name: b
+   salaried: false
+   skills: #Multiple Objects
+    - 'JS'
+    - 'Node'
+   comments: >
+    this is singe line comment
+    ,second line
+
+# {{.values.servces.name}} > place holders
+# --- Multiple yaml files

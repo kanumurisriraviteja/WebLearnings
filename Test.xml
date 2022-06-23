@@ -1,0 +1,20 @@
+<Employees>
+    <Employee>
+       <Id>1</Id>
+       <Name>a</Name>
+       <Salaried>false</Salaried>
+       <Skills>
+         <skill>c#</skill>
+         <skill>MVC</skill>
+       </Skills>
+    </Employee>
+    <Employee>
+       <Id>2</Id>
+       <Name>b</Name>
+       <Salaried>true</Salaried>
+       <Skills>
+         <skill>c#</skill>
+         <skill>MVC</skill>
+       </Skills>
+    </Employee>
+</Employees>

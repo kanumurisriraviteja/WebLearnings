@@ -1,0 +1,19 @@
+{
+    "Employees":
+    [
+        {        
+            "Id": 1,   
+            "Name":"a",
+            "Salaried":false,
+            "Skills":["c#","MVC"],
+             "Comment": "In Javascript we would have it as  Id:1"
+        },
+        {
+            "Id": 2,
+            "Name":"b",
+            "Salaried":false,
+            "Skills":["JS","Node"]
+        }
+
+    ]
+}
