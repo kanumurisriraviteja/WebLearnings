@@ -1,0 +1,321 @@
+https://docs.google.com/document/d/18I_a4vVZG3GHx-QQymgpVlznUkpj7Eq3ZzrBID6zpMw/edit
+user318@roidtc.com
+august21ROI
+
+sample-master/external
+http://www.git-scm.com/book/en/v2
+
+ls
+----------------------------------------------------------------------------------
+Git
+----------------------------------------------------------------------------------
+.gitignore
+----------------------------------------------------------------------------------
+node_modules
+logs
+*.log
+npm-debug.log*
+
+git config --global user.email "your_email_on_github"
+git config --global user.name "your_github_user_name"
+Verify with: git config --global --list
+
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin your-git-internal-repo-address
+git push -u origin master
+
+
+To show the branch :git branch
+To create a branch: git branch new-feature-X 
+To select a branch: git checkout new-feature-X
+
+
+First checkout the master: git checkout master
+Then merge the branch: git merge new-feature-X
+----------------------------------------------------------------------------------
+Docker:
+----------------------------------------------------------------------------------
+-t =>Tag, internal => image name , v1=> version
+****create a dockerfile*****
+
+# Use Google base image for NodeJS
+FROM launcher.gcr.io/google/nodejs
+
+# Copy application code.
+COPY . /app/
+
+# Change the working directory
+WORKDIR /app
+
+# Install dependencies.
+RUN npm install
+
+# Start the Express app
+CMD ["node", "server.js"]
+
+
+****create a .dockerignore*****
+node_modules
+npm-debug.log
+
+To build external, from the external folder:
+docker build . -t external:v1.0.0
+To build internal, from the internal folder:
+docker build . -t internal:v1.0.0
+
+To run internal, from the internal folder:
+docker run -d -p 8082:8082 internal:v1.0.0
+To run external, from the external folder
+docker run -d -p 8080:8080 -e SERVER='http://localhost:8082' --network="host" external:v1.0.0
+Test your app by previewing on port 8080
+Other commands to try:
+docker images
+docker ps -a
+docker stop <ContainerID>
+docker rm <ContainerID>
+
+
+**** Docker container registry*****
+
+In the Google Cloud Console, go to Container Registry 
+Enable the API if needed
+Click Settings on left
+Enable Vulnerability Scanning
+In Cloud Shell:
+From external folder, run the following command:
+gcloud builds submit --tag gcr.io/$GOOGLE_CLOUD_PROJECT/external-image:v1.0.0 .
+Type Y if asked to enable API
+From internal folder, run the following command:
+gcloud builds submit --tag gcr.io/$GOOGLE_CLOUD_PROJECT/internal-image:v1.0.0 
+
+
+If you have any previous containers running, you will need to stop them
+Or you will get a port number already in use error
+Below are a few commands to help you stop any containers: 
+List all Docker processes with: docker ps -a
+Stop and remove all Docker processes:
+docker stop <container_id>
+docker rm <container_id>
+List and delete all the local Docker images:
+docker images
+docker rmi <image-id>
+
+
+In CloudShell, run the case study directly from the container registry
+Refer back to the last activity for the Docker run commands
+Use the URL to the image in the registry for the image names
+For example, your run commands will look similar to:	
+docker run -d -p 8082:8082 gcr.io/$GOOGLE_CLOUD_PROJECT/internal-image:v1.0.0
+docker run -d -p 8080:8080 -e SERVER='http://localhost:8082' --network="host" gcr.io/$GOOGLE_CLOUD_PROJECT/external-image:v1.0.0
+
+
+
+Docker Hub:
+
+Go to Docker Hub (https://hub.docker.com) 
+Create an account
+Rebuild your Docker images using your Docker ID
+From external folder:
+docker build -t your-docker-hub-id/external:v1.0 .
+From internal  folder:
+docker build -t your-docker-hub-id/internal:v1.0 .
+In Cloud Shell:
+docker login
+docker push your-docker-hub-id/internal:v1.0
+docker push your-docker-hub-id/external:v1.0
+
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+Kubernetes:
+gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project dtcaugust2021-318
+
+
+From the Google Cloud Console (https://console.cloud.google.com):
+Click the Navigation menu and select Kubernetes Engine
+Use the Console to create a cluster with following settings:
+Standard Mode cluster (not Autopilot)
+Zonal cluster (should be the default)
+Click default-pool and verify the number of nodes is 3
+Click Nodes, verify the machine type is a standard-2 (2 CPUs) and NOT a shared-core, and check the Enable preemptible nodes
+Click Security, and set Access Scopes to Allow full access to all Cloud APIs
+Click the Create button
+Wait for it to be created (3-5 minutes)
+
+A Connect button will appear when the cluster is ready
+Click the three vertical dots       and then the Connect button, and then choose Run in Cloud Shell
+Cloud Shell will open with a command pre-created
+Run the command
+This command creates the kubectl config file for your cluster
+When it has completed, test your access by using kubectl commands:
+kubectl get services 
+This should return a single service named Kubernetes
+kubectl get nodes
+This should return 3 nodes
+--------------------------------------------------------------------------------------------------------------
+In Cloud Shell, run the following command to download a zip file:
+wget https://storage.googleapis.com/deloitte-training/k8s-yamls.zip
+Type the following to unzip: unzip k8s-yamls.zip
+Change into the k8s-yamls folder
+You should see four yaml files
+Investigate the four yaml files and answer the questions on the next slide
+
+You will need to edit and change the gcr.io URLs in both deployment yaml files to match your images in gcr
+Verify the entire URL is correct – including the version 
+Apply all four yamls with: kubectl apply -f <yaml file> 
+Run the command four times, one for each file
+Get service external IP with: kubectl get svc
+Test your services by loading the external IP of the load balancer service in a browser
+You no longer use the Cloud Shell Preview button
+-------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------
+FireBase:
+
+In the Google Cloud Console, click Navigation Menu | Firestore
+Click the Select Native Mode button
+Select a location that matches where your other resources are running
+Click the Create Database button
+
+In Cloud Shell, navigate to the internal folder and install Firestore node module:
+npm install --save @google-cloud/firestore
+In the internal/server.js, require Firestore and initialize Firestore:
+
+// bring in firestore
+const Firestore = require("@google-cloud/firestore");
+
+// initialize Firestore and set project id from env var
+const firestore = new Firestore(
+    {
+        projectId: process.env.GOOGLE_CLOUD_PROJECT
+    }
+);
+Keep the internal/server.js file open, and make the edits on the next slides
+
+app.post('/event', (req, res) => {
+    // create a new object from the json data and add an id
+    const ev = { 
+        title: req.body.title, 
+        description: req.body.description,
+        id : mockEvents.events.length + 1
+     }
+// this will create the Events collection if it does not exist
+    firestore.collection("Events").add(ev).then(ret => {
+        getEvents(req, res);
+    });
+
+});
+function getEvents(req, res) {
+    firestore.collection("Events").get()
+        .then((snapshot) => {
+            if (!snapshot.empty) {
+                const ret = { events: []};
+                snapshot.docs.forEach(element => {
+                    ret.events.push(element.data());
+                }, this);
+                console.log(ret);
+                res.json(ret);
+            } else {
+                 res.json(mockEvents);
+            }
+        })
+        .catch((err) => {
+            console.error('Error getting events', err);
+            res.json(mockEvents);
+        });
+};
+app.get('/events', (req, res) => {
+    getEvents(req, res);
+});
+The internal server.js now needs an environment variable called GOOGLE_CLOUD_PROJECT
+This variable stores the Google Cloud project ID
+It is there by default in Cloud Shell
+To run your app in Kubernetes, you will need to add the environment variable for your internal deployment yaml:
+Tip: look at the external deployment yaml for an env: example
+
+env:
+- name: GOOGLE_CLOUD_PROJECT
+  value: <PROJECT_ID> 
+  
+  
+  Like:
+  f you have added likes, you will need the id of the event you are updating
+Firestore assigns unique ids automatically
+You could make it available inside the returned object with code like this inside getEvents:
+
+snapshot.docs.forEach(element => {
+//get data
+const el = element.data();
+//get internal firestore id and assign to object
+el.id = element.id;
+//add object to array
+ret.events.push(el);
+}, this);
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+Jenkins
+-------------------------------------------------------------------------------------------------------------------
+To use the Jenkins Docker Image and pipeline, you must have:
+A Kubernetes cluster in your project
+At least one Node.js deployment already running in the cluster
+
+Locate your computer’s public IP address
+Open a new browser window and perform
+a search for “what is my ip”
+Copy your IP address displayed 
+Run the following command in your Cloud Shell to create a firewall rule allowing traffic on port 80 (http) from your IP address
+IMPORTANT: be sure to replace PutYourPublicIPHere with the IP just copied
+gcloud compute firewall-rules create default-allow-http --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:80 --source-ranges=PutYourPublicIPHere/32 --target-tags=http-server
+If you get an error the firewall rule already exists, delete it and try again:
+gcloud compute firewall-rules delete default-allow-http
+
+Create a new Compute Engine instance
+Give the instance a name that you can recognize as being your Jenkins instance
+Make it a small machine type
+Select Deploy a container image to this VM instance 
+Use hello-world for the container
+This is just to ensure Docker is installed on the VM
+You will SSH in a moment and run a Jenkins container in the VM
+Select Allow full access to all Cloud APIs
+Select Allow HTTP traffic
+
+After the VM starts, click the SSH button on the console to SSH into the vm 
+Run the following command from the SSH session to run a container we have provided that has Jenkins installed (it will take a couple minutes to download):
+docker run -d -p 80:8080 -p 50000:50000 --name jenkinsdemo -v jenkins_home:/var/jenkins_home drehnstrom/jenkins-gcp:v0.2
+When it completes, get the admin password:
+docker exec jenkinsdemo cat /var/jenkins_home/secrets/initialAdminPassword
+
+If you run the above command and it complains that it cannot find the file, wait a while and try again
+The underlying process may not have finished even though you got your command prompt back
+Copy the Jenkins admin password displayed 
+You will need it in the next section
+
+
+
+In a browser, go to the external IP of the VM 
+Copy the external IP from Compute Engine
+Note: It may take a while to be serving properly—wait a minute and try again if not working yet
+When Jenkins is running, enter the admin password 
+Click Install  suggested plugins and let it finish
+Create an Admin User – you can use any username and password
+Follow the prompts to complete the setup
+Click New Item on the left-hand side or click the Create new jobs link under Welcome
+Give it a name and select Pipeline, then click OK
+Continued on next slide
+
+
+Create a pipeline using this startpoint and replacing [vars] with your values: https://storage.googleapis.com/deloitte-training/Jenkinsfile
+Use wget on your Cloud Shell to download the above file and then open in the editor and follow the instructions at the top of the file
+You do NOT need to change the way the images are being versioned; the use of :2.${env.BUILD_ID} generates a dynamic version number that will auto-increment with each Jenkins build
+Copy/paste to the Pipeline box (click Pipeline in your Jenkins window)
+Click Save
+Click Build Now
+Continued on next slide
+
+To run the pipeline, click Build Now
+You will see the stages complete
+If you get an error, click the build date in the Build History section on the bottom left, and then click Console output
+Review the output and correct any errors
+If the pipeline successfully completes, run the following command in your Cloud Shell
+kubectl get pods
+You should see the pod is being replaced

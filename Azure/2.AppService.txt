@@ -1,0 +1,3 @@
+kanumuriwebapp.azurewebsites.net/api/values/getcar
+
+https://kanumuristorageacc.z22.web.core.windows.net/home

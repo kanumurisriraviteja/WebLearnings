@@ -1,0 +1,19 @@
+Powershell version: $PSVersionTable.PSVersion,Get-Host | Select-Object Version
+
+Installing the Azure Powershell
+=====================================================================================================================
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force
+
+
+Get-Module -Name Az  -ListAvailable
+Update-Module -Name Azure
+
+
+get-command *webapp*
+
+Vm
+-----------------
+kanumurivm
+Kanumuri_201992
+

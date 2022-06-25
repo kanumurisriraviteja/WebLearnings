@@ -1,0 +1,8 @@
+1. Different classes in bootsrap 
+  col-xs- > Extra small devices
+  sm > small devices
+  md > medium devices like laptop,desktop
+  lg > large desktop
+
+2. col-md-offset-3 push the column by 3 columns 
+

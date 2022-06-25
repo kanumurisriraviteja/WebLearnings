@@ -1,0 +1,34 @@
+Virtual Machine:
+=====================================================================================================================
+The VM will be created with the default size Standard_D2s_v3.
+
+ARM(Azure Resource Manager) Templates 
+Azure cli:
+az login
+az --version
+powershell:
+Connecting Azure from the poweshell: Connect-AzAccount
+Get-AzVM
+
+> Creating using powershell :  https://docs.microsoft.com/en-us/azure/virtual-machines/windows/tutorial-manage-vm  
+
+New-AzResourceGroup -Name myResourceGroup -Location EastUS
+New-AzVm `
+    -ResourceGroupName "myResourceGroup" `
+    -Name "myVM" `
+    -Location "East US" `
+    -VirtualNetworkName "myVnet" `
+    -SubnetName "mySubnet" `
+    -SecurityGroupName "myNetworkSecurityGroup" `
+    -PublicIpAddressName "myPublicIpAddress" `
+    -OpenPorts 80,3389
+	
+> Creating using azurecli   :  https://docs.microsoft.com/en-us/azure/virtual-machines/windows/quick-create-cli
+
+az group create --name myResourceGroup --location eastus
+az vm create \
+    --resource-group myResourceGroup \
+    --name myVM \
+    --image Win2019Datacenter \
+    --public-ip-sku Standard \
+    --admin-username azureuser
