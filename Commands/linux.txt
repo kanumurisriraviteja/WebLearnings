@@ -1,0 +1,15 @@
+mkdir               // make directory
+cd                  // change directory
+touch <filname>     // creates a file 
+ls                  // list
+ls *.txt            // gets only the text files
+cat>filname.txt     // create a new file and write the content to the file. end of the string is ctrl +D
+cat <filename>      // display content of file
+cat file1 file2> file3   //contents of file1,file2 are copied to file3
+pwd                      // present working directory
+cp                      // copy copy the files/directory
+mv                      // move
+curl                     //
+head                    // top 10 lines in the file 
+tail                    // botton 10 lines in the file
+cd - // one step back of directory

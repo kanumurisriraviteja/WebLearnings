@@ -1,0 +1,32 @@
+FROM <node> // runtime
+ENV MONGO_
+
+RUN mkdir -p /home/app   //execute linux commands > executes a director in home/app on the container
+COPY . /home/app         // executes on the host
+CMD["node","server.js"]  // only one
+
+======================================================================================================
+docker build -t <tagname> -f Dockerfile . // -t tagname -f filename  .  means current director 
+
+docker run -d -p 8080:80 --name aspnetcorewebapicontainer <tagname> // running the docker container aspnetcorewebapicontainer
+
+docker push <tagname> // pushes to the docker hub
+
+docker pull <tagname> // pulls image from the docker hub
+
+http://localhost:8080/api/car/getallcar  //gets the data
+
+docker ps -all// shows  the list of container
+
+docker container ls
+
+docker images //shows the list of images
+
+docker rm <containerid> //deletes the container
+
+docker rmi <imageid> // deletes the image id 
+
+docker exec -it <containerid>  /bin/sh
+				       /bin/bash
+
+docker logs <containerid>/888c6f8345af
