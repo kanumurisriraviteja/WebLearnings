@@ -24,9 +24,9 @@ docker images //shows the list of images
 
 docker rm <containerid> //deletes the container
 
-docker rmi <imageid> // deletes the image id 
+docker rmi <imageid> // deletes the image id    docker rmi $(docker ps -a -q) // deletes all the docker images
 
 docker exec -it <containerid>  /bin/sh
-				       /bin/bash
+			       /bin/bash
 
 docker logs <containerid>/888c6f8345af
