@@ -7,3 +7,4 @@ git push -u origin main
 
 git remote -version // to know the source version which is binded
 git --version // to know the installed version
+git status //to know the status of the unchecked files
