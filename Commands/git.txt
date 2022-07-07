@@ -6,6 +6,8 @@ git remote add origin https://github.com/kanumurisriraviteja/WebLearn.git
 git push -u origin main      //git push --set-upstream origin master  // -u means upstream
 
 git remote -version // to know the source version which is binded
+git remote remove origin  // remove the set version
+
 git --version // to know the installed version
 git status //to know the status of the unchecked files
 git config --global user.email "you@example.com"
